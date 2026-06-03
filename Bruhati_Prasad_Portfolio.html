@@ -1,0 +1,1219 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bruhati Prasad — Product Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+<style>
+/* ─── TOKENS ────────────────────────────────────────────────── */
+:root {
+  --cream:   #fdf6ee;
+  --blush:   #f5c9c0;
+  --rose:    #e8927c;
+  --mauve:   #c98fa8;
+  --lavender:#d6c3e8;
+  --mint:    #b8ddd0;
+  --butter:  #f7e8a0;
+  --peach:   #fde8d5;
+  --ink:     #2a1f1a;
+  --mid:     #6b4e47;
+  --soft:    #a08880;
+  --white:   #fffaf6;
+
+  --ff-display: 'Playfair Display', serif;
+  --ff-body:    'DM Sans', sans-serif;
+  --ff-mono:    'Space Mono', monospace;
+}
+
+/* ─── RESET ─────────────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--ff-body);
+  overflow-x: hidden;
+  cursor: none;
+}
+/* Always allow pointer on clickable elements so links actually work */
+a, button, [onclick] { cursor: pointer !important; }
+
+/* ─── CUSTOM CURSOR ─────────────────────────────────────────── */
+#cursor {
+  width: 14px; height: 14px;
+  background: var(--rose);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: transform .1s, width .25s, height .25s, background .25s;
+  mix-blend-mode: multiply;
+}
+#cursor-ring {
+  width: 38px; height: 38px;
+  border: 1.5px solid var(--mauve);
+  border-radius: 50%;
+  position: fixed; top: 0; left: 0;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: transform .18s ease, width .3s, height .3s;
+  opacity: .7;
+}
+body:hover #cursor { width: 14px; }
+a:hover ~ #cursor, button:hover ~ #cursor { width: 30px; height: 30px; }
+
+/* ─── SCROLLBAR ─────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--peach); }
+::-webkit-scrollbar-thumb { background: var(--mauve); border-radius: 3px; }
+
+/* ─── NOISE TEXTURE OVERLAY ─────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  opacity: .025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ─── FLOATING DOODLES ───────────────────────────────────────── */
+.doodle {
+  position: fixed; pointer-events: none; z-index: 0;
+  font-size: 1.4rem; opacity: .18;
+  animation: floatDoodle 8s ease-in-out infinite;
+  user-select: none;
+}
+.doodle:nth-child(1)  { top:8%;  left:3%;  animation-delay:0s; font-size:1.1rem; }
+.doodle:nth-child(2)  { top:22%; right:4%; animation-delay:1.2s; }
+.doodle:nth-child(3)  { top:55%; left:2%;  animation-delay:2.4s; font-size:1rem; }
+.doodle:nth-child(4)  { top:70%; right:3%; animation-delay:.6s; font-size:1.6rem; }
+.doodle:nth-child(5)  { top:88%; left:5%;  animation-delay:3.1s; }
+.doodle:nth-child(6)  { top:40%; right:2%; animation-delay:1.8s; font-size:1rem; }
+@keyframes floatDoodle {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  33%     { transform: translateY(-14px) rotate(4deg); }
+  66%     { transform: translateY(8px) rotate(-3deg); }
+}
+
+/* ─── MARQUEE ────────────────────────────────────────────────── */
+.marquee-wrap {
+  background: var(--rose);
+  color: var(--white);
+  padding: .45rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: var(--ff-mono);
+  font-size: .72rem;
+  letter-spacing: .08em;
+  position: relative; z-index: 10;
+}
+.marquee-inner {
+  display: inline-block;
+  animation: marquee 28s linear infinite;
+}
+.marquee-inner span { margin: 0 2rem; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ─── NAV ────────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 500;
+  padding: 1.1rem 2.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(253,246,238,.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(201,143,168,.2);
+  transition: box-shadow .3s;
+}
+nav.scrolled { box-shadow: 0 4px 32px rgba(201,143,168,.18); }
+.nav-logo {
+  font-family: var(--ff-display);
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--rose);
+  text-decoration: none;
+  letter-spacing: -.01em;
+}
+.nav-logo span { color: var(--mauve); font-style: italic; }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a {
+  font-size: .8rem; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--mid); text-decoration: none;
+  position: relative; transition: color .25s;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+  height: 2px; background: var(--rose);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .28s ease;
+}
+.nav-links a:hover { color: var(--rose); }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-cta {
+  background: var(--rose); color: var(--white);
+  border: none; border-radius: 100px;
+  padding: .55rem 1.4rem;
+  font-family: var(--ff-body); font-size: .8rem; font-weight: 500;
+  cursor: pointer; letter-spacing: .04em;
+  transition: background .25s, transform .2s;
+  text-decoration: none; display: inline-block;
+}
+.nav-cta:hover { background: var(--mauve); transform: scale(1.04); }
+
+/* ─── HERO ───────────────────────────────────────────────────── */
+#hero {
+  min-height: 100vh;
+  padding: 7rem 5vw 4rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg-blob {
+  position: absolute; pointer-events: none; z-index: 0;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: .45;
+}
+.blob1 { width:460px; height:460px; background:var(--blush);   top:-10%; left:-8%; animation: blobFloat 9s ease-in-out infinite; }
+.blob2 { width:340px; height:340px; background:var(--lavender); bottom:0;  right:-5%; animation: blobFloat 11s ease-in-out infinite reverse; }
+.blob3 { width:240px; height:240px; background:var(--butter);  top:40%;  left:40%; animation: blobFloat 13s ease-in-out infinite 2s; }
+@keyframes blobFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50%     { transform: translate(20px,-20px) scale(1.06); }
+}
+
+.hero-text { position: relative; z-index: 2; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--butter); color: var(--mid);
+  border-radius: 100px; padding: .35rem 1rem;
+  font-size: .75rem; font-weight: 500; letter-spacing: .06em;
+  margin-bottom: 1.4rem;
+  border: 1px solid rgba(201,143,168,.25);
+  animation: fadeUp .6s ease both;
+}
+.hero-tag::before { content: '✦'; color: var(--rose); }
+.hero-name {
+  font-family: var(--ff-display);
+  font-size: clamp(3rem, 6vw, 5.2rem);
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--ink);
+  animation: fadeUp .7s ease .1s both;
+}
+.hero-name em {
+  font-style: italic;
+  color: var(--rose);
+  display: block;
+}
+.hero-role {
+  font-family: var(--ff-mono);
+  font-size: .85rem;
+  color: var(--mauve);
+  letter-spacing: .1em;
+  margin: 1.2rem 0 1.6rem;
+  animation: fadeUp .7s ease .2s both;
+}
+.hero-desc {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--mid);
+  max-width: 480px;
+  animation: fadeUp .7s ease .3s both;
+}
+.hero-desc strong { color: var(--rose); font-weight: 500; }
+.hero-buttons {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  margin-top: 2.2rem;
+  animation: fadeUp .7s ease .4s both;
+}
+.btn-primary {
+  background: var(--ink); color: var(--white);
+  padding: .85rem 2rem; border-radius: 100px;
+  font-size: .88rem; font-weight: 500;
+  text-decoration: none; display: inline-flex; align-items: center; gap: .5rem;
+  transition: background .25s, transform .2s;
+  cursor: none;
+}
+.btn-primary:hover { background: var(--rose); transform: translateY(-2px); }
+.btn-outline {
+  background: transparent; color: var(--ink);
+  border: 1.5px solid var(--ink);
+  padding: .85rem 2rem; border-radius: 100px;
+  font-size: .88rem; font-weight: 500;
+  text-decoration: none; display: inline-flex; align-items: center; gap: .5rem;
+  transition: all .25s;
+  cursor: none;
+}
+.btn-outline:hover { border-color: var(--rose); color: var(--rose); transform: translateY(-2px); }
+
+/* hero visual card */
+.hero-visual { position: relative; z-index: 2; animation: fadeUp .8s ease .2s both; }
+.profile-card {
+  background: var(--white);
+  border-radius: 32px;
+  padding: 2.5rem;
+  box-shadow: 0 24px 80px rgba(201,143,168,.22), 0 4px 20px rgba(0,0,0,.06);
+  position: relative;
+  border: 1px solid rgba(201,143,168,.15);
+}
+.profile-card::before {
+  content: '';
+  position: absolute; inset: -2px;
+  border-radius: 34px;
+  background: linear-gradient(135deg, var(--blush), var(--lavender), var(--mint));
+  z-index: -1; opacity: .6;
+}
+.profile-avatar {
+  width: 100px; height: 100px;
+  background: linear-gradient(135deg, var(--blush), var(--mauve));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.8rem;
+  margin-bottom: 1.4rem;
+  box-shadow: 0 8px 24px rgba(201,143,168,.35);
+}
+.profile-name {
+  font-family: var(--ff-display);
+  font-size: 1.35rem; font-weight: 700;
+  color: var(--ink); margin-bottom: .3rem;
+}
+.profile-role-tag {
+  font-family: var(--ff-mono);
+  font-size: .7rem; color: var(--mauve);
+  letter-spacing: .08em; margin-bottom: 1.4rem;
+}
+.stat-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: .8rem; margin-top: 1.4rem;
+}
+.stat-pill {
+  background: var(--cream);
+  border-radius: 14px; padding: .8rem 1rem;
+  text-align: center;
+  border: 1px solid rgba(201,143,168,.15);
+}
+.stat-num {
+  font-family: var(--ff-display);
+  font-size: 1.5rem; font-weight: 900;
+  color: var(--rose);
+}
+.stat-label {
+  font-size: .7rem; color: var(--soft);
+  letter-spacing: .05em; margin-top: .2rem;
+}
+.availability-chip {
+  display: inline-flex; align-items: center; gap: .45rem;
+  background: #d4f5e9; color: #2a7a5a;
+  border-radius: 100px; padding: .35rem .9rem;
+  font-size: .72rem; font-weight: 500;
+  margin-top: 1.4rem;
+}
+.availability-chip::before {
+  content: '';
+  width: 7px; height: 7px;
+  background: #3bba7e;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .5; transform: scale(1.4); }
+}
+
+.floating-sticker {
+  position: absolute;
+  background: var(--white);
+  border-radius: 16px;
+  padding: .5rem .8rem;
+  font-size: .75rem; font-weight: 500;
+  color: var(--ink);
+  box-shadow: 0 8px 24px rgba(0,0,0,.1);
+  border: 1px solid rgba(201,143,168,.2);
+  white-space: nowrap;
+  animation: stickerFloat 6s ease-in-out infinite;
+}
+.sticker-1 { top: -1.2rem; right: -1.5rem; animation-delay: 0s; }
+.sticker-2 { bottom: 1rem;  left: -2rem;   animation-delay: 1.5s; }
+@keyframes stickerFloat {
+  0%,100% { transform: translateY(0) rotate(-2deg); }
+  50%     { transform: translateY(-8px) rotate(2deg); }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── SECTION SHARED ─────────────────────────────────────────── */
+section { position: relative; z-index: 2; }
+.section-inner { max-width: 1100px; margin: 0 auto; padding: 5.5rem 5vw; }
+.section-kicker {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--ff-mono); font-size: .72rem;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--mauve); margin-bottom: .8rem;
+}
+.section-kicker::before { content: '◆'; font-size: .5rem; }
+.section-title {
+  font-family: var(--ff-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900; line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+.section-title em { color: var(--rose); font-style: italic; }
+
+/* ─── ABOUT ──────────────────────────────────────────────────── */
+#about { background: var(--white); }
+.about-grid {
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: 5rem; align-items: start;
+}
+.about-body {
+  font-size: 1.02rem; line-height: 1.82;
+  color: var(--mid);
+}
+.about-body p + p { margin-top: 1.1rem; }
+.about-body strong { color: var(--ink); }
+.fun-facts {
+  background: var(--cream);
+  border-radius: 24px; padding: 2rem;
+  border: 1px solid rgba(201,143,168,.18);
+}
+.fun-facts h4 {
+  font-family: var(--ff-display);
+  font-size: 1rem; font-weight: 700;
+  color: var(--ink); margin-bottom: 1.2rem;
+}
+.fun-fact {
+  display: flex; align-items: flex-start; gap: .8rem;
+  padding: .7rem 0;
+  border-bottom: 1px dashed rgba(201,143,168,.25);
+}
+.fun-fact:last-child { border-bottom: none; }
+.fact-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: .05rem; }
+.fact-text { font-size: .88rem; line-height: 1.55; color: var(--mid); }
+.fact-text strong { color: var(--ink); font-weight: 500; }
+
+/* ─── SKILLS MARQUEE STRIP ───────────────────────────────────── */
+.skills-strip {
+  background: linear-gradient(135deg, var(--lavender), var(--blush));
+  padding: 3rem 5vw;
+  overflow: hidden;
+}
+.skills-row {
+  display: flex; gap: .85rem; flex-wrap: wrap;
+  justify-content: center;
+}
+.skill-chip {
+  background: var(--white);
+  border-radius: 100px;
+  padding: .5rem 1.2rem;
+  font-size: .82rem; font-weight: 500;
+  color: var(--ink);
+  border: 1.5px solid rgba(201,143,168,.2);
+  box-shadow: 0 3px 12px rgba(201,143,168,.15);
+  transition: transform .2s, box-shadow .2s;
+  cursor: default;
+  display: flex; align-items: center; gap: .4rem;
+}
+.skill-chip:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 8px 24px rgba(201,143,168,.28); }
+.skill-chip .chip-icon { font-size: 1rem; }
+
+/* ─── EXPERIENCE ─────────────────────────────────────────────── */
+#experience { background: var(--cream); }
+.exp-card {
+  background: var(--white);
+  border-radius: 28px;
+  padding: 2.5rem;
+  border: 1px solid rgba(201,143,168,.18);
+  box-shadow: 0 8px 40px rgba(201,143,168,.1);
+  position: relative; overflow: hidden;
+}
+.exp-card::after {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 5px; height: 100%;
+  background: linear-gradient(to bottom, var(--rose), var(--mauve));
+  border-radius: 5px 0 0 5px;
+}
+.exp-header {
+  display: flex; justify-content: space-between;
+  align-items: flex-start; margin-bottom: 1.5rem;
+  flex-wrap: wrap; gap: 1rem;
+}
+.exp-company {
+  font-family: var(--ff-display);
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--ink);
+}
+.exp-role {
+  font-family: var(--ff-mono);
+  font-size: .78rem; color: var(--mauve);
+  letter-spacing: .07em; margin-top: .3rem;
+}
+.exp-badge {
+  background: var(--butter);
+  border-radius: 100px; padding: .35rem 1rem;
+  font-size: .72rem; font-weight: 500;
+  color: var(--mid); white-space: nowrap;
+}
+.exp-bullets { list-style: none; }
+.exp-bullets li {
+  position: relative; padding-left: 1.4rem;
+  font-size: .93rem; line-height: 1.7;
+  color: var(--mid); margin-bottom: .55rem;
+}
+.exp-bullets li::before {
+  content: '✦';
+  position: absolute; left: 0; top: .1rem;
+  font-size: .6rem; color: var(--rose);
+}
+.exp-bullets li strong { color: var(--ink); font-weight: 500; }
+.exp-bullets li .metric {
+  background: var(--blush); color: var(--rose);
+  border-radius: 6px; padding: .05rem .4rem;
+  font-weight: 600; font-size: .85em;
+}
+
+/* ─── PROJECTS ───────────────────────────────────────────────── */
+#projects { background: var(--white); }
+.projects-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem; margin-top: 3rem;
+}
+.project-card {
+  border-radius: 24px;
+  padding: 2rem;
+  position: relative; overflow: hidden;
+  transition: transform .3s, box-shadow .3s;
+  cursor: default;
+}
+.project-card:hover { transform: translateY(-6px); }
+.pc-1 { background: linear-gradient(135deg, #fde8d5, #f5c9c0); }
+.pc-2 { background: linear-gradient(135deg, #d6c3e8, #f5c9c0); }
+.pc-3 { background: linear-gradient(135deg, #b8ddd0, #d6c3e8); }
+.pc-4 { background: linear-gradient(135deg, #f7e8a0, #fde8d5); }
+.pc-5 { background: linear-gradient(135deg, #f5c9c0, #d6c3e8); }
+.pc-6 { background: linear-gradient(135deg, #b8ddd0, #f7e8a0); }
+.pc-7 { background: linear-gradient(135deg, #d6c3e8, #b8ddd0); }
+.pc-8 { background: linear-gradient(135deg, #fde8d5, #d6c3e8); }
+.pc-9 { background: linear-gradient(135deg, #f7e8a0, #b8ddd0); }
+.project-card:hover { box-shadow: 0 16px 50px rgba(201,143,168,.25); }
+.project-emoji {
+  font-size: 2rem; margin-bottom: 1rem;
+  display: block;
+}
+.project-name {
+  font-family: var(--ff-display);
+  font-size: 1.1rem; font-weight: 700;
+  color: var(--ink); margin-bottom: .5rem;
+}
+.project-desc {
+  font-size: .88rem; line-height: 1.65;
+  color: var(--mid); margin-bottom: 1.2rem;
+}
+.project-tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.tag {
+  background: rgba(255,255,255,.65);
+  border-radius: 100px; padding: .25rem .7rem;
+  font-size: .72rem; font-weight: 500;
+  color: var(--ink);
+  backdrop-filter: blur(4px);
+}
+.project-metric {
+  margin-top: 1rem;
+  font-family: var(--ff-mono);
+  font-size: .75rem; color: var(--rose);
+  font-weight: 700;
+}
+.project-badge {
+  display: inline-flex; align-items: center; gap: .35rem;
+  border-radius: 100px; padding: .28rem .75rem;
+  font-size: .68rem; font-weight: 600;
+  letter-spacing: .04em; margin-bottom: .9rem;
+}
+.badge-client   { background: #d4f5e9; color: #2a6a50; }
+.badge-internal { background: var(--lavender); color: #4a3070; }
+.badge-flagship { background: var(--blush); color: #8a3040; }
+.badge-featured { background: var(--butter); color: #7a5c00; }
+
+/* ─── EDUCATION ──────────────────────────────────────────────── */
+#education { background: var(--cream); }
+.edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+.edu-card {
+  background: var(--white);
+  border-radius: 24px; padding: 2rem;
+  border: 1px solid rgba(201,143,168,.18);
+  position: relative; overflow: hidden;
+  transition: transform .25s;
+}
+.edu-card:hover { transform: translateY(-4px); }
+.edu-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(to right, var(--rose), var(--lavender));
+}
+.edu-icon { font-size: 1.8rem; margin-bottom: .9rem; }
+.edu-degree {
+  font-family: var(--ff-display);
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--ink); margin-bottom: .3rem;
+}
+.edu-school { font-size: .88rem; color: var(--mauve); font-weight: 500; margin-bottom: .2rem; }
+.edu-year { font-family: var(--ff-mono); font-size: .72rem; color: var(--soft); letter-spacing: .06em; }
+
+/* ─── CONTACT ────────────────────────────────────────────────── */
+#contact {
+  background: linear-gradient(135deg, var(--ink) 0%, #3d2930 100%);
+  color: var(--white);
+}
+#contact .section-kicker { color: var(--blush); }
+#contact .section-title { color: var(--white); }
+.contact-grid {
+  display: grid; grid-template-columns: 1.1fr 1fr;
+  gap: 5rem; align-items: center;
+}
+.contact-body {
+  font-size: 1.02rem; line-height: 1.8;
+  color: rgba(253,246,238,.7);
+  margin-bottom: 2rem;
+}
+.contact-links { display: flex; flex-direction: column; gap: .85rem; }
+.contact-link {
+  display: flex; align-items: center; gap: 1rem;
+  color: var(--white); text-decoration: none;
+  font-size: .95rem;
+  padding: 1rem 1.4rem;
+  background: rgba(255,255,255,.06);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.1);
+  transition: background .25s, transform .2s;
+  cursor: none;
+}
+.contact-link:hover { background: rgba(232,146,124,.2); transform: translateX(6px); }
+.contact-link-icon { font-size: 1.2rem; }
+.contact-form-side {
+  background: rgba(255,255,255,.05);
+  border-radius: 28px; padding: 2.5rem;
+  border: 1px solid rgba(255,255,255,.1);
+}
+.contact-form-side h4 {
+  font-family: var(--ff-display);
+  font-size: 1.2rem; color: var(--white);
+  margin-bottom: 1.5rem;
+}
+.form-field {
+  margin-bottom: 1.1rem;
+}
+.form-field label {
+  display: block; font-size: .78rem;
+  letter-spacing: .06em; color: rgba(253,246,238,.6);
+  margin-bottom: .4rem; text-transform: uppercase;
+}
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 12px;
+  padding: .8rem 1rem;
+  color: var(--white);
+  font-family: var(--ff-body); font-size: .9rem;
+  outline: none;
+  transition: border-color .25s;
+  resize: none;
+}
+.form-field input:focus,
+.form-field textarea:focus { border-color: var(--rose); }
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: rgba(253,246,238,.3); }
+.form-note {
+  font-size: .75rem; line-height: 1.6;
+  color: rgba(253,246,238,.5);
+  background: rgba(255,255,255,.05);
+  border-radius: 10px; padding: .65rem .9rem;
+  margin-bottom: 1.1rem;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.btn-send {
+  width: 100%; background: var(--rose);
+  color: var(--white); border: none;
+  border-radius: 100px; padding: .9rem;
+  font-family: var(--ff-body); font-size: .9rem; font-weight: 500;
+  cursor: pointer; transition: background .25s, transform .2s;
+  letter-spacing: .04em;
+}
+.btn-send:hover { background: var(--mauve); transform: scale(1.02); }
+
+/* ─── FOOTER ─────────────────────────────────────────────────── */
+footer {
+  background: var(--ink);
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding: 1.8rem 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+}
+.footer-copy {
+  font-family: var(--ff-mono); font-size: .7rem;
+  color: rgba(253,246,238,.35); letter-spacing: .06em;
+}
+.footer-made {
+  font-size: .75rem; color: rgba(253,246,238,.4);
+}
+.footer-made span { color: var(--rose); }
+
+/* ─── SCROLL REVEAL ──────────────────────────────────────────── */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  #hero { grid-template-columns: 1fr; padding-top: 6rem; }
+  .hero-visual { order: -1; }
+  .about-grid, .contact-grid, .edu-grid { grid-template-columns: 1fr; gap: 2rem; }
+  nav { padding: 1rem 1.2rem; }
+  .nav-links { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Background doodles -->
+<div class="doodle">✦</div>
+<div class="doodle">◌</div>
+<div class="doodle">✿</div>
+<div class="doodle">◆</div>
+<div class="doodle">✦</div>
+<div class="doodle">◇</div>
+
+<!-- ── MARQUEE ── -->
+<div class="marquee-wrap" style="margin-top:0;position:relative;z-index:600">
+  <div class="marquee-inner">
+    <span>✦ Product Manager</span><span>◆ Healthcare Tech</span>
+    <span>✦ Agile &amp; Scrum</span><span>◆ EHR / EMR</span>
+    <span>✦ Care Management</span><span>◆ HIPAA Compliance</span>
+    <span>✦ Bengaluru, India</span><span>◆ Open to Opportunities</span>
+    <span>✦ Product Manager</span><span>◆ Healthcare Tech</span>
+    <span>✦ Agile &amp; Scrum</span><span>◆ EHR / EMR</span>
+    <span>✦ Care Management</span><span>◆ HIPAA Compliance</span>
+    <span>✦ Bengaluru, India</span><span>◆ Open to Opportunities</span>
+  </div>
+</div>
+
+<!-- ── NAV ── -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">bruhati<span>.ps</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:bruhati.ps@gmail.com" target="_blank" class="nav-cta">Say hello 👋</a>
+</nav>
+
+<!-- ══════════════════════════════════════════
+     HERO
+══════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg-blob blob1"></div>
+  <div class="hero-bg-blob blob2"></div>
+  <div class="hero-bg-blob blob3"></div>
+
+  <div class="hero-text">
+    <div class="hero-tag">Available for new opportunities</div>
+    <h1 class="hero-name">
+      Bruhati
+      <em>Prasad S</em>
+    </h1>
+    <p class="hero-role">PRODUCT MANAGER · HEALTHCARE TECH · BENGALURU</p>
+    <p class="hero-desc">
+      I turn <strong>complex healthcare workflows</strong> into products people actually want to use.
+      3 years shipping care management dashboards, consumer health apps, AI tools, and even a
+      <strong>WhatsApp communication platform</strong> — across India and international clients.
+    </p>
+    <div class="hero-buttons">
+      <a href="#projects" class="btn-primary">See my work ✦</a>
+      <a href="#contact" class="btn-outline">Let's talk →</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="profile-card">
+      <div class="floating-sticker sticker-1">🏥 Healthcare PM</div>
+      <div class="floating-sticker sticker-2">⚡ Agile delivery</div>
+      <div class="profile-avatar">👩‍💻</div>
+      <div class="profile-name">Bruhati Prasad S</div>
+      <div class="profile-role-tag">// PRODUCT_MANAGER.exe</div>
+      <div class="availability-chip">Open to opportunities</div>
+      <div class="stat-grid">
+        <div class="stat-pill">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-num">30%</div>
+          <div class="stat-label">EHR Adoption ↑</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-num">8+</div>
+          <div class="stat-label">Products Shipped</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-num">0</div>
+          <div class="stat-label">P0 Incidents 🎉</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     ABOUT
+══════════════════════════════════════════ -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-grid reveal">
+      <div>
+        <div class="section-kicker">About me</div>
+        <h2 class="section-title">A PM who <em>actually</em> reads the docs</h2>
+        <div class="about-body">
+          <p>Hey! I'm Bruhati — a product manager based in Bengaluru who specialises in <strong>healthcare technology</strong>. I've spent the last <strong>3 years</strong> at Circle Health building things that matter: the Circle Health consumer app for consultations and lab bookings, dashboards that help care teams spot at-risk patients faster, an in-house WhatsApp communication platform, and EHR systems that clinicians actually want to use.</p>
+          <p>I've also delivered for <strong>international clients</strong> — including an AI-powered medical data extractor built for a healthcare client in the Philippines. My work spans consumer products, internal tools, and US-market care management programs.</p>
+          <p>My superpower is sitting at the intersection of <strong>clinical complexity</strong> and <strong>clean product thinking</strong>. I speak fluent HIPAA, can write acceptance criteria in my sleep, and genuinely enjoy a well-run sprint retrospective. I'm currently pursuing my <strong>MBA at Manipal University Jaipur</strong> while working full-time — because apparently I love a challenge.</p>
+        </div>
+      </div>
+      <div class="fun-facts">
+        <h4>✨ Quick facts about me</h4>
+        <div class="fun-fact">
+          <span class="fact-icon">🌏</span>
+          <div class="fact-text"><strong>International client experience.</strong> Delivered an AI medical data extractor for a Filipino healthcare client — not just India-market work.</div>
+        </div>
+        <div class="fun-fact">
+          <span class="fact-icon">💬</span>
+          <div class="fact-text"><strong>Built an internal WhatsApp platform.</strong> Care coordinators, nurses, and patients — all connected through one custom comms tool I owned end to end.</div>
+        </div>
+        <div class="fun-fact">
+          <span class="fact-icon">🏥</span>
+          <div class="fact-text"><strong>Healthcare is my domain.</strong> CCM, RPM, BHI, PCM, EHR/EMR — I know the acronyms and the workflows behind them.</div>
+        </div>
+        <div class="fun-fact">
+          <span class="fact-icon">🤖</span>
+          <div class="fact-text"><strong>AI-native PM.</strong> I use Gemini, Eleven Labs, and Whisper in actual products — not just in LinkedIn posts.</div>
+        </div>
+        <div class="fun-fact">
+          <span class="fact-icon">📊</span>
+          <div class="fact-text"><strong>Data-driven by default.</strong> Amplitude and Mixpanel are always open in my browser.</div>
+        </div>
+        <div class="fun-fact">
+          <span class="fact-icon">📚</span>
+          <div class="fact-text"><strong>MBA in progress</strong> at Manipal University Jaipur — learning strategy while shipping products.</div>
+        </div>
+        <div class="fun-fact">
+          <span class="fact-icon">☕</span>
+          <div class="fact-text"><strong>Based in Bengaluru.</strong> Fuelled by filter coffee and well-structured Jira boards.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     SKILLS STRIP
+══════════════════════════════════════════ -->
+<div class="skills-strip reveal">
+  <div class="skills-row">
+    <div class="skill-chip"><span class="chip-icon">⚡</span>Backlog Ownership</div>
+    <div class="skill-chip"><span class="chip-icon">✍️</span>User Story Writing</div>
+    <div class="skill-chip"><span class="chip-icon">🏥</span>CCM / RPM / BHI / PCM</div>
+    <div class="skill-chip"><span class="chip-icon">🔄</span>Agile / Scrum</div>
+    <div class="skill-chip"><span class="chip-icon">📋</span>Jira & Confluence</div>
+    <div class="skill-chip"><span class="chip-icon">🔒</span>HIPAA Compliance</div>
+    <div class="skill-chip"><span class="chip-icon">📊</span>Amplitude</div>
+    <div class="skill-chip"><span class="chip-icon">📈</span>Mixpanel</div>
+    <div class="skill-chip"><span class="chip-icon">🎨</span>Figma</div>
+    <div class="skill-chip"><span class="chip-icon">🤖</span>AI-assisted PM</div>
+    <div class="skill-chip"><span class="chip-icon">🏨</span>EHR / EMR</div>
+    <div class="skill-chip"><span class="chip-icon">💸</span>Claims & Billing</div>
+    <div class="skill-chip"><span class="chip-icon">🔬</span>Postman</div>
+    <div class="skill-chip"><span class="chip-icon">🧠</span>Google Gemini</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     EXPERIENCE
+══════════════════════════════════════════ -->
+<section id="experience">
+  <div class="section-inner">
+    <div class="section-kicker">Where I've worked</div>
+    <h2 class="section-title reveal">Experience that <em>ships</em></h2>
+    <div style="margin-top:2.5rem" class="reveal">
+      <div class="exp-card">
+        <div class="exp-header">
+          <div>
+            <div class="exp-company">Circle Health</div>
+            <div class="exp-role">// PRODUCT_MANAGER · PRODUCT_OWNER</div>
+          </div>
+          <div>
+            <div class="exp-badge">📍 Bengaluru · 2023 – Present</div>
+          </div>
+        </div>
+        <ul class="exp-bullets">
+          <li>Owned backlogs for <strong>4 live healthcare products</strong> — maintained 100% sprint-ready story queue with <span class="metric">zero critical blocker carryovers</span> across 6 consecutive quarters.</li>
+          <li>Wrote <strong>200+ epics, user stories, and acceptance criteria</strong> that reduced QA re-open rate by <span class="metric">~25%</span> through tighter Definition of Done alignment.</li>
+          <li>Drove EHR/EMR adoption to a <span class="metric">30% lift</span> in clinical data-capture utilisation by redesigning input flows based on direct clinician usability sessions — tracked via Amplitude.</li>
+          <li><strong>Reduced claims portal rejection rate</strong> by streamlining submission workflows — translated complex payer rules into clear user flows and functional requirements.</li>
+          <li>Served as <strong>single point of contact</strong> for engineering during sprint execution — resolving 8–10 requirement blockers per sprint and maintaining on-time delivery.</li>
+          <li>Delivered <strong>HIPAA-compliant features</strong> across all products, translating regulatory requirements into acceptance criteria signed off by compliance stakeholders.</li>
+          <li>Used Amplitude and Mixpanel to identify <span class="metric">3 under-utilised RPM features</span> and shipped targeted enhancements that lifted engagement.</li>
+          <li>Achieved <span class="metric">zero P0 production incidents</span> across 12 months by reviewing 100% of test cases against acceptance criteria before every release.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     PROJECTS
+══════════════════════════════════════════ -->
+<section id="projects">
+  <div class="section-inner">
+    <div class="section-kicker">What I've built</div>
+    <h2 class="section-title reveal">Projects I'm <em>proud of</em></h2>
+    <div class="projects-grid">
+
+      <!-- ── CARD 1: Circle Health App ── -->
+      <div class="project-card pc-1 reveal">
+        <span class="project-badge badge-flagship">🌟 Flagship Product</span>
+        <span class="project-emoji">📱</span>
+        <div class="project-name">Circle Health App</div>
+        <div class="project-desc">End-to-end consumer health super-app covering doctor consultations (video & in-clinic), lab test bookings, pharmacy, and health records. Owned the product backlog from MVP through iterative releases — defining user flows for booking, payments, notifications, and post-appointment care across web and mobile.</div>
+        <div class="project-tags">
+          <span class="tag">Consumer Health</span>
+          <span class="tag">Telehealth</span>
+          <span class="tag">Lab Bookings</span>
+          <span class="tag">Figma</span>
+          <span class="tag">Agora SDK</span>
+        </div>
+        <div class="project-metric">🏥 Consultations · Labs · Pharmacy in one app</div>
+      </div>
+
+      <!-- ── CARD 2: Medical Data Extractor ── -->
+      <div class="project-card pc-6 reveal">
+        <span class="project-badge badge-client">🌏 Client Project · Philippines</span>
+        <span class="project-emoji">🧬</span>
+        <div class="project-name">Medical Data Extractor</div>
+        <div class="project-desc">Built for a Filipino healthcare client — an AI-powered tool that extracts structured clinical data from unstructured medical documents (prescriptions, lab reports, discharge summaries). Defined requirements for OCR pipelines, data validation rules, and output schema to integrate with the client's existing systems.</div>
+        <div class="project-tags">
+          <span class="tag">AI / OCR</span>
+          <span class="tag">Data Extraction</span>
+          <span class="tag">Client Delivery</span>
+          <span class="tag">Clinical Docs</span>
+        </div>
+        <div class="project-metric">🤖 Unstructured → structured clinical data, automated</div>
+      </div>
+
+      <!-- ── CARD 3: CCM Dashboards ── -->
+      <div class="project-card pc-2 reveal">
+        <span class="project-badge badge-featured">📊 US Market</span>
+        <span class="project-emoji">💊</span>
+        <div class="project-name">CCM Dashboards</div>
+        <div class="project-desc">Dashboards for US Chronic Care Management programs — surfacing patient engagement scores, monthly care activity logs, billing readiness signals, and nurse task queues. Partnered with Dozee for RPM device data integration covering patient monitoring and device health tracking.</div>
+        <div class="project-tags">
+          <span class="tag">CCM · RPM · BHI · PCM</span>
+          <span class="tag">Amplitude</span>
+          <span class="tag">Dozee</span>
+          <span class="tag">Billing Readiness</span>
+        </div>
+        <div class="project-metric">↑ 40% faster at-risk patient identification</div>
+      </div>
+
+      <!-- ── CARD 4: WhatsApp Platform ── -->
+      <div class="project-card pc-7 reveal">
+        <span class="project-badge badge-internal">🏠 Internal Tool</span>
+        <span class="project-emoji">💬</span>
+        <div class="project-name">In-House WhatsApp Communication Platform</div>
+        <div class="project-desc">Owned the product for a custom internal WhatsApp-based communication platform connecting care coordinators, nurses, and patients. Defined workflows for appointment reminders, post-care follow-ups, bulk messaging, and two-way chat — reducing manual outreach time for the care ops team.</div>
+        <div class="project-tags">
+          <span class="tag">WhatsApp API</span>
+          <span class="tag">Care Ops</span>
+          <span class="tag">Automation</span>
+          <span class="tag">Patient Communication</span>
+        </div>
+        <div class="project-metric">⚡ Automated appointment reminders & care follow-ups</div>
+      </div>
+
+      <!-- ── CARD 5: Claims Portal ── -->
+      <div class="project-card pc-3 reveal">
+        <span class="project-badge badge-featured">💸 Revenue Impact</span>
+        <span class="project-emoji">🧾</span>
+        <div class="project-name">Claims & Payout Portal</div>
+        <div class="project-desc">Usability audit + end-to-end redesign of a claims management portal. Identified 12 high-friction steps, simplified submission workflows, and reduced rejection rates by translating complex payer billing rules into clear user flows and functional requirements.</div>
+        <div class="project-tags">
+          <span class="tag">Claims Workflow</span>
+          <span class="tag">Figma</span>
+          <span class="tag">Payer Rules</span>
+          <span class="tag">Finance Ops</span>
+        </div>
+        <div class="project-metric">↓ Measurable drop in claim rejection rate</div>
+      </div>
+
+      <!-- ── CARD 6: EHR / EMR ── -->
+      <div class="project-card pc-4 reveal">
+        <span class="project-badge badge-featured">🏥 Clinical</span>
+        <span class="project-emoji">🩺</span>
+        <div class="project-name">EHR / EMR Suite</div>
+        <div class="project-desc">Specialty-specific EHR/EMR systems across 3 clinical specialties — built with direct clinician input on usability, data capture accuracy, and compliance. Tracked feature adoption via Amplitude cohort analysis to drive continuous improvement.</div>
+        <div class="project-tags">
+          <span class="tag">EHR / EMR</span>
+          <span class="tag">HIPAA</span>
+          <span class="tag">Clinical UX</span>
+          <span class="tag">Amplitude</span>
+        </div>
+        <div class="project-metric">↑ 30% higher clinical data-capture adoption</div>
+      </div>
+
+      <!-- ── CARD 7: AI Support ── -->
+      <div class="project-card pc-5 reveal">
+        <span class="project-badge badge-featured">🤖 AI-Powered</span>
+        <span class="project-emoji">🎙️</span>
+        <div class="project-name">AI Customer Support System</div>
+        <div class="project-desc">Voice and chat support platform built with Eleven Labs — automated the top 15 recurring healthcare queries including appointment booking FAQs, test prep info, and billing questions, improving first-response time and reducing support load on the ops team.</div>
+        <div class="project-tags">
+          <span class="tag">Eleven Labs</span>
+          <span class="tag">AI Automation</span>
+          <span class="tag">Voice + Chat</span>
+        </div>
+        <div class="project-metric">⚡ Top 15 recurring queries fully automated</div>
+      </div>
+
+      <!-- ── CARD 8: Video + Transcription ── -->
+      <div class="project-card pc-8 reveal">
+        <span class="project-badge badge-featured">🎥 Telehealth</span>
+        <span class="project-emoji">📹</span>
+        <div class="project-name">Video Consultation & Transcription Platform</div>
+        <div class="project-desc">Telehealth video solution built on Agora SDK with Whisper-powered transcription — enabling recorded, fully searchable consultations. Reduced post-consultation documentation time for clinicians and improved medical record accuracy.</div>
+        <div class="project-tags">
+          <span class="tag">Agora SDK</span>
+          <span class="tag">Whisper</span>
+          <span class="tag">Telehealth</span>
+          <span class="tag">AI Transcription</span>
+        </div>
+        <div class="project-metric">📝 Recorded + searchable consultations</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     EDUCATION
+══════════════════════════════════════════ -->
+<section id="education">
+  <div class="section-inner">
+    <div class="section-kicker">Education</div>
+    <h2 class="section-title reveal">Always <em>learning</em></h2>
+    <div class="edu-grid reveal">
+      <div class="edu-card">
+        <div class="edu-icon">🎓</div>
+        <div class="edu-degree">MBA (Pursuing)</div>
+        <div class="edu-school">Manipal University Jaipur</div>
+        <div class="edu-year">// CURRENTLY_ENROLLED · 2024–PRESENT</div>
+      </div>
+      <div class="edu-card">
+        <div class="edu-icon">💻</div>
+        <div class="edu-degree">B.Sc. Computer Science</div>
+        <div class="edu-school">BMS College for Women, Bengaluru</div>
+        <div class="edu-year">// GRADUATED · 2023</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════
+     CONTACT
+══════════════════════════════════════════ -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="contact-grid reveal">
+      <div>
+        <div class="section-kicker">Say hello</div>
+        <h2 class="section-title" style="color:var(--white)">Let's build something <em style="color:var(--blush)">great</em> together</h2>
+        <p class="contact-body">Whether you're a health-tech startup looking for a PM who understands the clinical nuance, a recruiter with an exciting role, or someone who just wants to geek out about product — I'd love to hear from you.</p>
+        <div class="contact-links">
+          <a href="mailto:bruhati.ps@gmail.com" onclick="openMail(event,'mailto:bruhati.ps@gmail.com')" class="contact-link">
+            <span class="contact-link-icon">✉️</span>
+            <span>bruhati.ps@gmail.com</span>
+          </a>
+          <a href="tel:+917892203230" class="contact-link">
+            <span class="contact-link-icon">📱</span>
+            <span>+91 78922 03230</span>
+          </a>
+          <a href="https://www.linkedin.com/in/bruhati-prasad-2285a3259/" target="_blank" class="contact-link">
+            <span class="contact-link-icon">💼</span>
+            <span>linkedin.com/in/bruhati-prasad-2285a3259</span>
+          </a>
+          <a href="#" class="contact-link">
+            <span class="contact-link-icon">📍</span>
+            <span>Bengaluru, Karnataka, India</span>
+          </a>
+        </div>
+      </div>
+      <div class="contact-form-side">
+        <h4>Send me a message ✦</h4>
+        <div class="form-note">
+          💡 Clicking Send will open your email app (Gmail, Outlook, etc.) with your message pre-filled — so it lands directly in Bruhati's inbox.
+        </div>
+        <div class="form-field">
+          <label>Your name</label>
+          <input type="text" id="f-name" placeholder="Hey Bruhati, I'm..."/>
+        </div>
+        <div class="form-field">
+          <label>Your email</label>
+          <input type="email" id="f-email" placeholder="so I can write back"/>
+        </div>
+        <div class="form-field">
+          <label>Subject</label>
+          <input type="text" id="f-subject" placeholder="Opportunity / Collab / Just saying hi"/>
+        </div>
+        <div class="form-field">
+          <label>Message</label>
+          <textarea rows="4" id="f-msg" placeholder="Tell me about the opportunity, collab, or just say hi 👋"></textarea>
+        </div>
+        <button class="btn-send" onclick="handleFormSubmit(this)">Send via Email ✦</button>
+        <p style="margin-top:.8rem;font-size:.72rem;color:rgba(253,246,238,.4);text-align:center;letter-spacing:.03em;">
+          Or email directly: <a href="mailto:bruhati.ps@gmail.com" onclick="openMail(event,'mailto:bruhati.ps@gmail.com')" style="color:var(--blush)">bruhati.ps@gmail.com</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">© 2025 BRUHATI PRASAD S · ALL RIGHTS RESERVED</div>
+  <div class="footer-made">Made with <span>♥</span> in Bengaluru</div>
+</footer>
+
+<script>
+// ── CURSOR ──────────────────────────────────────────────────
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+;(function moveCursor() {
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+  rx += (mx - rx) * .12;
+  ry += (my - ry) * .12;
+  ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+  requestAnimationFrame(moveCursor);
+})();
+document.querySelectorAll('a, button, .project-card, .skill-chip').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cur.style.width = '28px'; cur.style.height = '28px';
+    ring.style.width = '56px'; ring.style.height = '56px';
+    cur.style.background = 'var(--mauve)';
+  });
+  el.addEventListener('mouseleave', () => {
+    cur.style.width = '14px'; cur.style.height = '14px';
+    ring.style.width = '38px'; ring.style.height = '38px';
+    cur.style.background = 'var(--rose)';
+  });
+});
+
+// ── SMOOTH SCROLL — accounts for fixed nav height ───────────
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', function(e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (!target) return;
+    e.preventDefault();
+    const navH = document.getElementById('navbar').offsetHeight;
+    const top = target.getBoundingClientRect().top + window.pageYOffset - navH - 12;
+    window.scrollTo({ top, behavior: 'smooth' });
+  });
+});
+
+// ── SCROLL REVEAL ───────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── NAV SCROLL ──────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ── FORM — opens email client WITHOUT leaving the page ───────
+function handleFormSubmit(btn) {
+  const name    = (document.getElementById('f-name').value    || '').trim();
+  const email   = (document.getElementById('f-email').value   || '').trim();
+  const subject = (document.getElementById('f-subject').value || '').trim() || 'Portfolio Enquiry';
+  const msg     = (document.getElementById('f-msg').value     || '').trim();
+
+  if (!name && !msg) {
+    btn.textContent = '⚠ Fill in your name & message first';
+    btn.style.background = '#c0392b';
+    setTimeout(() => { btn.textContent = 'Send via Email ✦'; btn.style.background = ''; }, 2500);
+    return;
+  }
+
+  const bodyText = [
+    name  ? `From: ${name}`     : '',
+    email ? `Reply-to: ${email}` : '',
+    '',
+    msg || '(no message entered)'
+  ].filter(Boolean).join('\n');
+
+  const mailto = `mailto:bruhati.ps@gmail.com`
+    + `?subject=${encodeURIComponent(subject)}`
+    + `&body=${encodeURIComponent(bodyText)}`;
+
+  // Use a hidden link — prevents blank page issue entirely
+  const a = document.createElement('a');
+  a.href = mailto;
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  btn.textContent = '✓ Email app opening — just hit Send!';
+  btn.style.background = '#3bba7e';
+  btn.style.color = '#fff';
+  setTimeout(() => {
+    btn.textContent = 'Send via Email ✦';
+    btn.style.background = '';
+    btn.style.color = '';
+  }, 4000);
+}
+
+// ── OPEN MAIL HELPER — prevents page navigation ─────────────
+function openMail(e, mailto) {
+  e.preventDefault();
+  const a = document.createElement('a');
+  a.href = mailto; a.style.display = 'none';
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+}
+document.querySelectorAll('.project-card').forEach((card, i) => {
+  card.style.transitionDelay = (i * 0.1) + 's';
+});
+</script>
+</body>
+</html>
